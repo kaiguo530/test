@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>第三方合作渠道用户管理</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css?v=1481599228020"/>
+    <link rel="stylesheet" href="../css/base.css?v=d1481599228020"/>
+    <link rel="stylesheet" href="../css/page.css?v=d1481599228020"/>
+    <link rel="stylesheet" href="../css/tool.css?v=1481599228020"/>
+
+
+</head>
+<body ng-app="nowApp" ng-controller="listCtrl">
+<div class="box" ng-show="sta==0">
+    <div class="title">
+        第三方合作渠道用户管理<button class="btn btn-primary ml10" ng-click="add()">新增合作渠道用户</button>
+    </div>
+    <ul class="searchBox hidden" >
+        <li><label>合作伙伴号：</label><input type="text" ng-model="sea.partnerId"></li>
+        <li><label>渠道号：</label><input type="text" ng-model="sea.chl"></li>
+        <li><label>第三方平台手机号：</label><input type="text" ng-model="sea.mobile"></li>
+        <li><label>状态：</label>
+            <select ng-options="item.key as item.val for item in status" ng-model="sea.status">
+            </select>
+        </li>
+        <li>
+            <button class="btn btn-primary" ng-click="selFunc()">搜索</button>
+            <button class="btn btn-default" ng-click="selFunc(0)">重置</button>
+        </li>
+    </ul>
+    <table class="table table-bordered myTableList">
+        <thead>
+        <tr>
+            <th width="3%">序号</th>
+            <th width="5%">渠道号</th>
+            <th width="5%">是否是老用户</th>
+            <th width="7%">执行过的任务</th>
+            <th width="7%">任务类型</th>
+            <th width="7%">业务号数据</th>
+            <th width="7%">推送状态</th>           
+            <th width="7%">推送失败原因</th>
+            <th width="10%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-if="list.length>0" ng-repeat="item in list">
+            <td ng-bind="$index+1"></td>
+            <td ng-bind="item.chl"></td>
+            <td ng-bind="item.isold==0?'新用户':'老用户'"></td>
+            <td ng-bind="item.executeTaskStatus"></td>
+            <td ng-bind="item.taskType></td>
+            <td ng-bind="item.businessKey"></td>
+            <td ng-bind="item.status"></td>
+            <td ng-bind="item.msg"></td>
+            <td ng-bind="item.mobile"></td>
+            <td>
+                <button class="btn btn-primary" ng-click="editFunc(item)"  ><i class="glyphicon glyphicon-edit mr10"></i>编辑</button>
+                <button class="btn btn-warning" ng-click="editFunc2(item.id)"  ><i class="glyphicon glyphicon-edit mr10"></i>重置密码</button>
+                <button class="btn btn-danger" ng-click="delFunc(item.id)"  ><i class="glyphicon glyphicon-edit mr10"></i>删除</button>
+            </td>
+        </tr>
+        <tr ng-if="list.length==0">
+            <td colspan="8">暂无数据</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="clearfix tc container">
+        <pp-page params="params" totle="totle"></pp-page>
+    </div>
+</div>
+
+<div class="box" ng-show="sta==1||sta==2">
+    <div class="title">
+        <span ng-if="sta==2">编辑合作渠道用户</span>
+        <span ng-if="sta==1">新增合作渠道用户</span>
+    </div>
+    <ul class="form-area" >
+        <li>
+            <label class="tt">渠道号：</label>
+            <input type="text" class="w300" placeholder="渠道号" ng-model="sdata.chl">
+        </li>
+        <li>
+            <label class="tt">是否是老用户：</label>
+             <input type="radio" ng-model="sdata.isold" ng-value="0" class="ml5"><span>新用户</span>
+             <input type="radio" ng-model="sdata.isold" ng-value="1"><span>老用户</span>
+        </li>
+        <li>
+            <label class="tt">执行过的任务：</label>
+            <input type="text" class="w300" placeholder="执行过的任务" ng-model="sdata.executeTaskStatus"  >
+        </li>
+        <li>
+            <label class="tt">任务类型：</label>
+            <input type="text" class="w300" placeholder="任务类型" ng-model="sdata.taskType"  >
+        </li>           
+        <li>
+            <label class="tt">第三方平台手机号：</label>
+            <input type="text" class="w300" placeholder="第三方平台手机号" ng-model="sdata.mobile"  >
+        </li>           
+        <li>
+            <label class="tt">推送状态：</label>
+            <input type="text"  ng-model="sdata.status" >
+        </li>
+     <!--    <li>
+            <label class="tt">推送失败原因：</label>
+            <textarea  ng-model="sdata.msg" ></textarea><span></span>
+        </li> -->
+       <!--  <li class="checkbox">
+            <label class="tt">权限：</label>
+            <span ng-repeat="item in permissionPage" class="mr10"><label><input type="checkbox"  ng-click="checkPermission($event,item)" >{{item.name}}</label></span>
+        </li> -->
+        <li>
+            <button class="btn btn-default" ng-click="back()">返回</button>
+            <button class="btn btn-public" ng-click="subFunc()">保存</button>
+        </li>
+
+    </ul>
+</div>
+
+
+</body>
+<script type="text/javascript" src="../js/jquery.min.js?v=1481599228020"></script>
+<script type="text/javascript" src="../js/jquery.md5.js?v=1481599228020"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js?v=1481599228020"></script>
+<script src="../js/tool.js?v=1481599228020"></script>
+<script type="text/javascript" src="../js/angular/angular.min.js?v=1481599228020"></script>
+<script type="text/javascript" src="../js/angular/controller/baseController.js?v=1481599228020" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/angular/service/baseService.js?v=1481599228020" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/angular/directive/baseDirective.js?v=1481599228020" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/angular/controller/partnerChannelUserController.js?v=16311469228020" charset="UTF-8"></script>
+<link rel="stylesheet" href="../js/jedate/skin/jedate.css?v=70d2e61"/>
+<script src="../js/jedate/jedate.min.js?v=1481599228020"></script>
+<script>
+    jeDate({
+        dateCell: "#date1",//isinitVal:true,
+        format: "YYYY-MM-DD hh:mm:ss",
+        isTime: true, //isClear:false,
+        isinitVal: false,
+        minDate: "2010-10-19 00:00:00"
+    });
+    jeDate({
+        dateCell: "#date2",//isinitVal:true,
+        format: "YYYY-MM-DD hh:mm:ss",
+        isTime: true, //isClear:false,
+        isinitVal: false,
+        minDate: "2010-10-19 00:00:00"
+    });
+</script>
+</html>
